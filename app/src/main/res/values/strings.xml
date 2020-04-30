@@ -14,4 +14,9 @@
     <string name="home_second">Home Second</string>
     <string name="OpenNavigation">Open</string>
     <string name="CloseNavigation">Close Navigation Drawer</string>
+    <string name="john_sina">John Sina</string>
+    <string name="john_gmail">john@gmail.com</string>
+    <string name="message">Message:</string>
+    <string name="btnSendDesc">backgroundImageForSendButton</string>
+    <string name="please_log_in">Please Log In</string>
 </resources>
