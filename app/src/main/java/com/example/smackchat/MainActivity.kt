@@ -1,5 +1,6 @@
 package com.example.smackchat
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -37,7 +38,8 @@ class MainActivity : AppCompatActivity() {
         toggle.syncState()
     }
     fun btnLoginNavClick(view:View){
-
+       val loginIntent = Intent(this,LoginActivity::class.java)
+        startActivity(loginIntent)
     }
 
     fun addChannelClick(view: View){
