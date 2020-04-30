@@ -30,4 +30,10 @@
     <string name="login_failed">"Login failed"</string>
     <string name="login">Login</string>
     <string name="background_image_to_add_channel">background image to add channel</string>
+    <string name="user_name">User Name</string>
+    <string name="password">password</string>
+    <string name="tab_to_generate_user_avatar">Tab to generate user avatar</string>
+    <string name="generate_background_colour">Generate Background Colour</string>
+    <string name="create_user">Create User</string>
+    <string name="background_image_to_avatar">background_image_to_avatar</string>
 </resources>
