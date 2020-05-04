@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import com.example.smackchat.R
 import com.example.smackchat.services.AuthService
 import kotlinx.android.synthetic.main.activity_create_user.*
@@ -46,13 +47,18 @@ class CreateUserActivity : AppCompatActivity() {
         avatarColor = "[$saveR, $saveG, $saveB, 1]"
     }
     fun createNewUserClick(view: View){
+        val userName= createUserNameText.text.toString()
         val email = createEmailText.text.toString()
         val password: String = createPasswordText.text.toString()
        AuthService.registerUser(this,email,password){ registerSuccess->
            if(registerSuccess){
-              AuthService.loginUser(this,email,password){loginSucess->
-                  if(loginSucess){
-                      
+              AuthService.loginUser(this,email,password){loginSuccess->
+                  if(loginSuccess){
+                      AuthService.crateUser(this,userName,email,userAvatar,avatarColor){crateSuccess->
+                          if(crateSuccess){
+                              finish()
+                          }
+                      }
                   }
               }
            }
