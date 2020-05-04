@@ -14,12 +14,11 @@ import kotlinx.android.synthetic.main.activity_create_user.*
 import java.util.*
 
 class CreateUserActivity : AppCompatActivity() {
-    var userAvatar = "profileDefault"
-    var avatarColor: String = "[0.5,0.5,0.5,1]"
+    var userAvatar = (R.drawable.profiledefault).toString()
+    var avatarColor: String = "[0.5, 0.5 ,0.5, 1]"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_user)
-
         createSpinner.visibility = View.INVISIBLE
     }
 
