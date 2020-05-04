@@ -36,4 +36,5 @@
     <string name="generate_background_colour">Generate Background Colour</string>
     <string name="create_user">Create User</string>
     <string name="background_image_to_avatar">background_image_to_avatar</string>
+    <string name="text_logout">Logout</string>
 </resources>
