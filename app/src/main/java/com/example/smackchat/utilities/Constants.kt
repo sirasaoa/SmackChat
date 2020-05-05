@@ -11,3 +11,8 @@ const val URL_CHANNELS = "${BASE_URL}channel"
 const val BROADCAST_USER_DATA_CHANGE = "BROADCAST_USER_DATA_CHANGE"
 
 const val SOCKET_URL = "https://chatsmackjs.herokuapp.com/"
+
+const val PREFS_FILENAME = "prefs"
+const val IS_LOGGED_IN = "isLoggedIn"
+const val AUTH_TOKEN = "authToken"
+const val USER_EMAIL = "userEmail"

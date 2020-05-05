@@ -1,6 +1,7 @@
 package com.example.smackchat.services
 
 import android.graphics.Color
+import com.example.smackchat.ui.App
 import java.util.*
 
 object UserDataService {
@@ -16,9 +17,9 @@ object UserDataService {
         avatarName = ""
         email =""
         name = ""
-        AuthService.authToken = ""
-        AuthService.userEmail = ""
-        AuthService.isLoggedIn = false
+        App.prefs.authToken = ""
+        App.prefs.userEmail = ""
+        App.prefs.isLoggedIn = false
     }
     fun returnAvatarColor(components:String):Int{
         //[1.3456789345, 1.548484784, 2.8848383000, 1]
