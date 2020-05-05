@@ -20,11 +20,14 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.smackchat.R
+import com.example.smackchat.model.Channel
 import com.example.smackchat.services.AuthService
+import com.example.smackchat.services.MessageService
 import com.example.smackchat.services.UserDataService
 import com.example.smackchat.utilities.BROADCAST_USER_DATA_CHANGE
 import com.example.smackchat.utilities.SOCKET_URL
 import io.socket.client.IO
+import io.socket.emitter.Emitter
 import io.socket.engineio.client.Socket
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
@@ -48,13 +51,20 @@ class MainActivity : AppCompatActivity() {
         )
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+
+        socket.connect()
+        /**
+         * we have crated the Socket.on - listening for specific event call ChannelCreated. And if we detected
+         * then we are going to use this listener right here new channel
+         */
+        socket.on("channelCreated",onNewChannel)
     }
 
     override fun onResume() {
         LocalBroadcastManager.getInstance(this).registerReceiver(userDataChangeReceiver,
             IntentFilter(BROADCAST_USER_DATA_CHANGE)
         )
-        socket.connect()
+
         super.onResume()
     }
 
@@ -119,6 +129,17 @@ class MainActivity : AppCompatActivity() {
        }
     }
 
+    //Listener for Emitter
+    private  val onNewChannel = Emitter.Listener {arguments->
+        runOnUiThread {
+            val channelName = arguments[0] as String
+            val channelDescription = arguments[1] as String
+            val channelId = arguments[2] as String
+
+            val newChannel = Channel(channelName,channelDescription,channelId)
+            MessageService.channels.add(newChannel)
+        }
+    }
     fun sendMessageBtnClick(view:View){
         hideKeyboard()
     }
