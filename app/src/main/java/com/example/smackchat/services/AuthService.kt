@@ -1,16 +1,16 @@
 package com.example.smackchat.services
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.util.Log
 import android.widget.Toast
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.example.smackchat.utilities.URL_CRATE_USER
-import com.example.smackchat.utilities.URL_LOGIN
-import com.example.smackchat.utilities.URL_REGISTER
+import com.example.smackchat.utilities.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
@@ -60,7 +60,7 @@ object AuthService {
                 complete(false)
             }
         },Response.ErrorListener {error->
-            Log.e("ERROR","Could not register user: $error")
+            Log.e("ERROR","Could not login user: $error")
             complete(false)
         }){
             override fun getBodyContentType(): String {
@@ -98,8 +98,7 @@ object AuthService {
                 }
             },
             Response.ErrorListener {error ->
-                Toast.makeText(context,error.toString(),Toast.LENGTH_SHORT).show();
-                Log.e("ERROR","Could not register user: $error")
+                Log.e("ERROR","Could not create user: $error")
                 complete(false)
             }){
             override fun getBodyContentType(): String {
@@ -115,5 +114,41 @@ object AuthService {
             }
         }
         Volley.newRequestQueue(context).add(createRequest)
+    }
+
+    fun findUserByEmail(context:Context,complete: (Boolean) -> Unit){
+        val getUserByEmail = object : JsonObjectRequest(Method.GET,"$URL_GET_USER_BY_EMAIL$userEmail",null,
+            Response.Listener { response->
+                try {
+                    UserDataService.id = response.getString("_id")
+                    UserDataService.avatarColor=response.getString("avatarColor")
+                    UserDataService.avatarName = response.getString("avatarName")
+                    UserDataService.email =response.getString("email")
+                    UserDataService.name = response.getString("name")
+
+                    val userDataChange = Intent(BROADCAST_USER_DATA_CHANGE)
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(userDataChange)
+                    complete(true)
+                }catch (e:JSONException){
+                    Log.e("JSON","EXC:" + e.localizedMessage)
+                    complete(false)
+                }
+            },
+            Response.ErrorListener {error->
+                Toast.makeText(context,error.toString(),Toast.LENGTH_SHORT).show();
+                Log.e("ERROR","Could not get the user: $error")
+                complete(false)
+            }){
+                  override fun getBodyContentType(): String {
+                     return "application/json; charset=utf-8"
+                  }
+
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String,String>()
+                headers.put("Authorization" ,"Bearer $authToken")
+                return headers
+                }
+        }
+        Volley.newRequestQueue(context).add(getUserByEmail)
     }
 }
