@@ -8,3 +8,5 @@ const val URL_GET_USER_BY_EMAIL = "${BASE_URL}user/byEmail/"
 
 //Broadcast Constants
 const val BROADCAST_USER_DATA_CHANGE = "BROADCAST_USER_DATA_CHANGE"
+
+const val SOCKET_URL = "https://chatsmackjs.herokuapp.com/"

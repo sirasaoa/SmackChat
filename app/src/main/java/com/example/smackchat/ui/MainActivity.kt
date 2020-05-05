@@ -6,8 +6,12 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.drawerlayout.widget.DrawerLayout
@@ -19,12 +23,14 @@ import com.example.smackchat.R
 import com.example.smackchat.services.AuthService
 import com.example.smackchat.services.UserDataService
 import com.example.smackchat.utilities.BROADCAST_USER_DATA_CHANGE
+import com.example.smackchat.utilities.SOCKET_URL
+import io.socket.client.IO
+import io.socket.engineio.client.Socket
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var appBarConfiguration: AppBarConfiguration
+    val socket = IO.socket(SOCKET_URL)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,12 +48,26 @@ class MainActivity : AppCompatActivity() {
         )
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+    }
 
+    override fun onResume() {
         LocalBroadcastManager.getInstance(this).registerReceiver(userDataChangeReceiver,
             IntentFilter(BROADCAST_USER_DATA_CHANGE)
         )
+        socket.connect()
+        super.onResume()
     }
 
+    override fun onPause() {
+        super.onPause()
+       // LocalBroadcastManager.getInstance(this).unregisterReceiver(userDataChangeReceiver)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(userDataChangeReceiver)
+        socket.disconnect()
+    }
     private val userDataChangeReceiver = object: BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if(AuthService.isLoggedIn){
@@ -77,17 +97,42 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun addChannelClick(view: View){
+       if(AuthService.isLoggedIn){
+           val builder = AlertDialog.Builder(this)
+           val dialogView = layoutInflater.inflate(R.layout.dialog_add_channels,null)
 
+           builder.setView(dialogView)
+               .setPositiveButton("Add"){dialogInterface, i ->  
+                  // val nameText = dialogView.findViewById<EditText>(R.id.addChannelNameText)
+                  // val descText = dialogView.findViewById<EditText>(R.id.addChannelDescText)
+                   val channelName = (dialogView.findViewById<EditText>(R.id.addChannelNameText)).text.toString()
+                   val channelDesc = (dialogView.findViewById<EditText>(R.id.addChannelDescText)).text.toString()
+
+
+                   //Create Channel
+                   socket.emit("newChannel",channelName,channelDesc)
+               }
+               .setNegativeButton("Cancel"){dialogInterface, i ->
+
+               }
+               .show()
+       }
     }
 
     fun sendMessageBtnClick(view:View){
-
+        hideKeyboard()
     }
     override fun onBackPressed() {
         if(drawer_layout.isDrawerOpen(GravityCompat.START)){
             drawer_layout.closeDrawer(GravityCompat.START)
         }else{
             super.onBackPressed()
+        }
+    }
+    fun hideKeyboard(){
+        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        if(inputManager.isAcceptingText){
+            inputManager.hideSoftInputFromWindow(currentFocus?.windowToken,0)
         }
     }
 }
