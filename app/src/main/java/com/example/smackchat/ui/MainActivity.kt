@@ -28,11 +28,13 @@ import com.example.smackchat.utilities.SOCKET_URL
 import io.socket.client.IO
 import io.socket.emitter.Emitter
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 
 class MainActivity : AppCompatActivity() {
     val socket = IO.socket(SOCKET_URL)
     lateinit var channelAdapeter: ArrayAdapter<Channel>
+    var selectedChannel: Channel? = null
 
     private fun setUpAdapter() {
         channelAdapeter =
@@ -65,7 +67,11 @@ class MainActivity : AppCompatActivity() {
          */
         socket.on("channelCreated", onNewChannel)
         setUpAdapter()
-
+        channel_list.setOnItemClickListener { _, _, index, _ ->
+            selectedChannel = MessageService.channels[index]
+            drawer_layout.closeDrawer(GravityCompat.START)
+            updateWithChannel()
+        }
         if(App.prefs.isLoggedIn){
             AuthService.findUserByEmail(this){}
         }
@@ -101,13 +107,23 @@ class MainActivity : AppCompatActivity() {
                 )
                 nav_view.btnLoginNavDrawer.text = getString(R.string.text_logout)
 
-                MessageService.getChannels(context) { channelSuccess ->
+                MessageService.getChannels{ channelSuccess ->
                     if (channelSuccess) {
-                        channelAdapeter.notifyDataSetChanged()
+                        if(MessageService.channels.count() > 0){
+                            selectedChannel = MessageService.channels[0]
+                            channelAdapeter.notifyDataSetChanged()
+                            updateWithChannel()
+                        }
+
                     }
                 }
             }
         }
+    }
+
+    fun updateWithChannel(){
+        mainChannelName.text = "#${selectedChannel?.name}"
+
     }
         fun btnLoginNavClick(view: View) {
             if (App.prefs.isLoggedIn) {
