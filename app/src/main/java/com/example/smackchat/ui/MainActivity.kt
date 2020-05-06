@@ -10,6 +10,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.navigation.NavigationView
@@ -20,6 +21,7 @@ import androidx.core.view.GravityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.smackchat.R
 import com.example.smackchat.model.Channel
+import com.example.smackchat.model.Message
 import com.example.smackchat.services.AuthService
 import com.example.smackchat.services.MessageService
 import com.example.smackchat.services.UserDataService
@@ -28,11 +30,13 @@ import com.example.smackchat.utilities.SOCKET_URL
 import io.socket.client.IO
 import io.socket.emitter.Emitter
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 
 class MainActivity : AppCompatActivity() {
     val socket = IO.socket(SOCKET_URL)
     lateinit var channelAdapeter: ArrayAdapter<Channel>
+    var selectedChannel: Channel? = null
 
     private fun setUpAdapter() {
         channelAdapeter =
@@ -64,8 +68,13 @@ class MainActivity : AppCompatActivity() {
          * then we are going to use this listener right here new channel
          */
         socket.on("channelCreated", onNewChannel)
+        socket.on("messageCreated",onNewMessage)
         setUpAdapter()
-
+        channel_list.setOnItemClickListener { _, _, index, _ ->
+            selectedChannel = MessageService.channels[index]
+            drawer_layout.closeDrawer(GravityCompat.START)
+            updateWithChannel()
+        }
         if(App.prefs.isLoggedIn){
             AuthService.findUserByEmail(this){}
         }
@@ -101,13 +110,23 @@ class MainActivity : AppCompatActivity() {
                 )
                 nav_view.btnLoginNavDrawer.text = getString(R.string.text_logout)
 
-                MessageService.getChannels(context) { channelSuccess ->
+                MessageService.getChannels{ channelSuccess ->
                     if (channelSuccess) {
-                        channelAdapeter.notifyDataSetChanged()
+                        if(MessageService.channels.count() > 0){
+                            selectedChannel = MessageService.channels[0]
+                            channelAdapeter.notifyDataSetChanged()
+                            updateWithChannel()
+                        }
+
                     }
                 }
             }
         }
+    }
+
+    fun updateWithChannel(){
+        mainChannelName.text = "#${selectedChannel?.name}"
+
     }
         fun btnLoginNavClick(view: View) {
             if (App.prefs.isLoggedIn) {
@@ -161,8 +180,33 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        private val onNewMessage = Emitter.Listener { arguments ->
+            runOnUiThread {
+                val msgBody = arguments[0] as String
+                val channelId = arguments[2] as String
+                val userName = arguments[3] as String
+                val userAvatar = arguments[4] as String
+                val userAvatarColor = arguments[5] as String
+                val id = arguments[6] as String
+                val timeStamp = arguments[7] as String
+
+                val newMessage = Message(msgBody,userName,channelId,userAvatar,userAvatarColor,id,timeStamp)
+                MessageService.messages.add(newMessage)
+                Toast.makeText(this,newMessage.message, Toast.LENGTH_LONG).show()
+            }
+
+        }
+
         fun sendMessageBtnClick(view: View) {
-            hideKeyboard()
+            if(App.prefs.isLoggedIn && messageTextView.text.isNotEmpty() && selectedChannel!= null){
+              val userId = UserDataService.id
+              val channelId = selectedChannel!!.id
+              socket.emit("newMessage",messageTextView.text.toString(), userId, channelId,
+                           UserDataService.name, UserDataService.avatarName, UserDataService.avatarColor)
+                messageTextView.text.clear()
+                hideKeyboard()
+            }
+
         }
 
         override fun onBackPressed() {
