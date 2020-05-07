@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/app_bar_main">
+    tools:showIn="@layout/app_bar_main"
+    android:background="@color/colorAccent">
 
     <TextView
         android:id="@+id/mainChannelName"
@@ -14,6 +15,7 @@
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="@string/please_log_in"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

@@ -2,6 +2,7 @@ package com.example.smackchat.services
 
 import android.content.Context
 import android.util.Log
+import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
@@ -9,7 +10,9 @@ import com.example.smackchat.model.Channel
 import com.example.smackchat.model.Message
 import com.example.smackchat.ui.App
 import com.example.smackchat.utilities.URL_CHANNELS
+import com.example.smackchat.utilities.URL_GET_MESSAGE
 import org.json.JSONException
+import java.lang.reflect.Method
 
 object MessageService {
 
@@ -48,5 +51,52 @@ object MessageService {
           }
       }
         App.prefs.requestQueue.add(channelRequest)
+    }
+
+    fun getMessages(channelID:String,complete: (Boolean) -> Unit){
+        val URL = "$URL_GET_MESSAGE$channelID"
+        val messageRequrest = object : JsonArrayRequest(Request.Method.GET, URL, null, Response.Listener {response ->
+            clearMessage()
+           try{
+               for(x in 0 until response.length()){
+                   val message = response.getJSONObject(x)
+                   val messageBody = message.getString("messageBody")
+                   val channelId = message.getString("channelId")
+                   val id = message.getString("_id")
+                   val userName = message.getString("userName")
+                   val userAvatar = message.getString("userAvatar")
+                   val userAvatarColor = message.getString("userAvatarColor")
+                   val timeStamp = message.getString("timeStamp")
+
+                   val newMessage =  Message(messageBody,userName,channelId,userAvatar,userAvatarColor,id,timeStamp)
+                   this.messages.add(newMessage)
+               }
+               complete(true)
+           }catch (e:JSONException){
+               Log.e("JSON","EXC:" + e.localizedMessage)
+               complete(false)
+           }
+        },Response.ErrorListener {error->
+            Log.e("ERROR","Could not retrieve channels: $error")
+            complete(false)
+        }){
+            override fun getBodyContentType(): String {
+                return "application/json; charset=utf-8"
+            }
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String,String>()
+                headers.put("Authorization","Bearer ${App.prefs.authToken}")
+                return headers
+            }
+        }
+        App.prefs.requestQueue.add(messageRequrest)
+    }
+
+    fun clearMessage(){
+        messages.clear()
+    }
+
+    fun clearChannels(){
+         channels.clear()
     }
 }

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.CreateUserActivity">
+    tools:context=".ui.CreateUserActivity"
+    android:background="@color/colorAccent">
 
     <EditText
         android:id="@+id/createEmailText"
@@ -16,9 +17,10 @@
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:ems="10"
-        android:hint="@android:string/defaultVoiceMailAlphaTag"
+        android:textColorHint="@android:color/darker_gray"
+        android:hint="email"
         android:inputType="textPersonName"
-        android:textColor="@android:color/darker_gray"
+        android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,8 +39,9 @@
         android:layout_marginRight="32dp"
         android:ems="10"
         android:hint="@string/user_name"
+        android:textColorHint="@android:color/darker_gray"
         android:inputType="textPersonName"
-        android:textColor="@android:color/darker_gray"
+        android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +60,8 @@
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
-        android:textColor="@android:color/darker_gray"
+        android:textColor="@android:color/white"
+        android:textColorHint="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createEmailText"

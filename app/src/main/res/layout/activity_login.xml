@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.LoginActivity">
+    tools:context=".ui.LoginActivity"
+    android:background="@color/colorAccent">
 
     <EditText
         android:id="@+id/loginEmailText"
@@ -18,6 +19,8 @@
         android:ems="10"
         android:hint="email"
         android:inputType="textPersonName"
+        android:textColorHint="@android:color/darker_gray"
+        android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,7 +36,9 @@
         android:layout_marginRight="32dp"
         android:ems="10"
         android:hint="@string/invalid_password"
+        android:textColor="@android:color/white"
         android:inputType="textPassword"
+        android:textColorHint="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginEmailText" />
@@ -47,7 +52,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
-        android:background="@color/colorPrimary"
+        android:background="@color/colour_button"
         android:onClick="loginLoginBtnClick"
         android:text="Login"
         android:textColor="#FFFFFF"
@@ -79,7 +84,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
-        android:background="@color/colorPrimary"
+        android:background="@color/colour_button"
         android:onClick="loginCreateUserClick"
         android:text="Sign Up Here"
         android:textColor="#FFFFFF"
@@ -92,6 +97,7 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@android:drawable/screen_background_dark_transparent"
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -37,4 +37,7 @@
     <string name="create_user">Create User</string>
     <string name="background_image_to_avatar">background_image_to_avatar</string>
     <string name="text_logout">Logout</string>
+    <string name="add_channel">Add Channel</string>
+    <string name="channel_name">Channel Name</string>
+    <string name="channel_description">Channel Description</string>
 </resources>
