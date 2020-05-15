@@ -43,19 +43,21 @@ class MainActivity : AppCompatActivity() {
     private lateinit var messageAdapter: MessageAdapter
     var selectedChannel: Channel? = null
     lateinit var channels:MutableList<Channel>
+    val test: Boolean = true
 
     private fun setUpAdapter() {
+        if(test) {
+            channelAdapter =
+                ChannelAdapter(this, MessageService.channels)
+            channel_list.adapter = channelAdapter
+            channel_list.adapter = channelAdapter
 
-        channelAdapter =
-            ChannelAdapter(this,MessageService.channels)
-        channel_list.adapter = channelAdapter
-        channel_list.adapter = channelAdapter
+            messageAdapter = MessageAdapter(this, MessageService.messages)
+            messageListView.adapter = messageAdapter
 
-        messageAdapter =  MessageAdapter(this,MessageService.messages)
-        messageListView.adapter = messageAdapter
-
-        val layoutManager = LinearLayoutManager(this)
-        messageListView.layoutManager = layoutManager
+            val layoutManager = LinearLayoutManager(this)
+            messageListView.layoutManager = layoutManager
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
