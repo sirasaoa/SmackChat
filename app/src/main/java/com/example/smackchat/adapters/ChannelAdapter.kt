@@ -43,12 +43,10 @@ class ChannelAdapter(context : Context, channels :MutableList<Channel> ): BaseAd
     }
 
     fun updateItemList(channelList:ArrayList<Channel>){
-        if(true){
        if(channelList.isNotEmpty()){
            this.channels.clear()
            this.channels.addAll(channelList)
        }
-        }
         notifyDataSetChanged()
     }
 
