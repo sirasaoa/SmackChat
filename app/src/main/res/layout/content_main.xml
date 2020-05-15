@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorAccent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/app_bar_main"
-    android:background="@color/colorAccent">
+    android:id="@+id/layout_main">
 
     <TextView
         android:id="@+id/mainChannelName"
@@ -28,40 +29,59 @@
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/messageTextView"
+        app:layout_constraintBottom_toTopOf="@+id/message_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mainChannelName" />
 
-    <EditText
-        android:id="@+id/messageTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="@string/message"
-        android:inputType="textMultiLine"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:importantForAutofill="no" />
 
-    <ImageButton
-        android:id="@+id/btnSendMessage"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@android:color/transparent"
-        android:onClick="sendMessageBtnClick"
-        android:tint="@color/colorPrimaryDark"
+    <LinearLayout
+        android:id="@+id/message_layout"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_menu_send"
-        android:contentDescription="@string/btnSendDesc" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <EditText
+            android:id="@+id/messageTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:textColor="@android:color/white"
+            android:layout_weight="1"
+            android:background="@drawable/message_rounded"
+            android:ems="10"
+            android:focusable="auto"
+            android:gravity="start|top"
+            android:hint="@string/message"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:selectAllOnFocus="false"
+            tools:layout_editor_absoluteX="99dp"
+            tools:layout_editor_absoluteY="630dp" />
+
+        <ImageButton
+            android:id="@+id/btnSendMessage"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/btnSendDesc"
+            android:onClick="sendMessageBtnClick"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:tint="@android:color/white"
+            app:srcCompat="@drawable/ic_menu_send"
+            tools:layout_editor_absoluteX="368dp"
+            tools:layout_editor_absoluteY="632dp" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

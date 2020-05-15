@@ -7,7 +7,9 @@ const val URL_CRATE_USER ="${BASE_URL}user/add"
 const val URL_GET_USER_BY_EMAIL = "${BASE_URL}user/byEmail/"
 const val URL_CHANNELS = "${BASE_URL}channel"
 const val URL_GET_MESSAGE ="${BASE_URL}message/byChannel/"
-
+//"^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
+const val EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z]+)*(\\.[A-Za-z]{2,})$"
+const val PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$"
 //Broadcast Constants
 const val BROADCAST_USER_DATA_CHANGE = "BROADCAST_USER_DATA_CHANGE"
 

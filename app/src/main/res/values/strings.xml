@@ -40,4 +40,7 @@
     <string name="add_channel">Add Channel</string>
     <string name="channel_name">Channel Name</string>
     <string name="channel_description">Channel Description</string>
+    <string name="don_t_have_account">Don\'t have account?</string>
+    <string name="sign_up_here">Sign Up Here</string>
+    <string name="email">email</string>
 </resources>

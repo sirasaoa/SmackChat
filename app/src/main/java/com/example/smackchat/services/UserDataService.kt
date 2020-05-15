@@ -41,6 +41,7 @@ object UserDataService {
             g = (scanner.nextDouble() * 255).toInt()
             b = (scanner.nextDouble() * 255).toInt()
         }
+
          return Color.rgb(r,g,b)
     }
 }
